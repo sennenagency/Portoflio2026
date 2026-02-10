@@ -15,7 +15,7 @@
             --bg: #000000;
             --txt: #ffffff;
             --accent: #1a1a1a;
-            --card-bg: #111111; /* Color de fondo si no carga video */
+            --card-bg: #111111;
             --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
         }
 
@@ -27,10 +27,10 @@
             font-family: 'Inter', -apple-system, sans-serif;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            cursor: none; /* Cursor custom en Desktop */
+            cursor: none;
         }
 
-        /* --- CURSOR CUSTOM (Solo Desktop) --- */
+        /* --- CURSOR (Desktop) --- */
         @media (hover: hover) and (pointer: fine) {
             .cursor {
                 width: 12px; height: 12px;
@@ -42,21 +42,14 @@
             }
             .cursor.hovered { width: 50px; height: 50px; background: rgba(255,255,255,0.2); backdrop-filter: blur(2px); }
         }
-        /* Ocultar en móvil */
-        @media (hover: none) { 
-            .cursor { display: none; } 
-            body { cursor: auto; }
-        }
+        @media (hover: none) { .cursor { display: none; } body { cursor: auto; } }
 
-        /* --- HERO: PORTADA --- */
+        /* --- HERO --- */
         .hero-container {
-            width: 100%;
-            height: 90vh; /* Alto impacto en móvil */
-            padding: 15px; /* Margen reducido en móvil */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
+            width: 100%; height: 90vh;
+            padding: 15px;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
         }
 
         .hero-image-wrapper {
@@ -64,7 +57,7 @@
             overflow: hidden;
             border-radius: 12px;
             position: relative;
-            background: var(--card-bg); /* Fallback color */
+            background: var(--card-bg);
         }
 
         .hero-bg {
@@ -75,38 +68,21 @@
         }
 
         .hero-image-wrapper:hover .hero-bg {
-            transform: scale(1.03);
-            filter: grayscale(0%);
+            transform: scale(1.03); filter: grayscale(0%);
         }
 
-        /* --- SCROLL INDICATOR (Animado) --- */
+        /* --- SCROLL INDICATOR --- */
         .scroll-indicator {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
+            position: absolute; bottom: 30px; left: 50%;
             transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            opacity: 0.7;
-            z-index: 10;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            opacity: 0.7; z-index: 10;
         }
-
-        .scroll-text {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            font-weight: 500;
-        }
-
+        .scroll-text { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 500; }
         .scroll-line {
-            width: 1px;
-            height: 40px;
-            background: linear-gradient(to bottom, #fff, transparent);
+            width: 1px; height: 40px; background: linear-gradient(to bottom, #fff, transparent);
             animation: scrollLine 2s infinite;
         }
-
         @keyframes scrollLine {
             0% { transform: scaleY(0); transform-origin: top; }
             50% { transform: scaleY(1); transform-origin: top; }
@@ -114,150 +90,123 @@
             100% { transform: scaleY(0); transform-origin: bottom; }
         }
 
-        /* --- HEADERS --- */
+        /* --- SECCIONES --- */
         .section-header {
             padding: 3rem 15px 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            border-bottom: 1px solid var(--accent);
-            margin: 0 15px;
+            display: flex; justify-content: space-between; align-items: baseline;
+            border-bottom: 1px solid var(--accent); margin: 0 15px;
         }
         .section-title { font-size: 0.95rem; font-weight: 500; color: #fff; }
         .section-meta { font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
 
-        /* --- VIDEO REELS (MARQUEE) --- */
+        /* --- REELS (MARQUEE) --- */
         .marquee-wrapper {
-            width: 100%; overflow: hidden;
-            padding: 1.5rem 0 3rem 0;
-            background: var(--bg);
-            position: relative;
+            width: 100%; overflow: hidden; padding: 1.5rem 0 3rem 0;
+            background: var(--bg); position: relative;
         }
-        /* Fades laterales para suavidad */
-        .marquee-wrapper::before, .marquee-wrapper::after {
-            content: ''; position: absolute; top: 0; bottom: 0; width: 50px; z-index: 2; pointer-events: none;
-        }
-        .marquee-wrapper::before { left: 0; background: linear-gradient(to right, var(--bg), transparent); }
-        .marquee-wrapper::after { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
+        .marquee-wrapper::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 50px; background: linear-gradient(to right, var(--bg), transparent); z-index: 2; pointer-events: none; }
+        .marquee-wrapper::after { content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 50px; background: linear-gradient(to left, var(--bg), transparent); z-index: 2; pointer-events: none; }
 
         .marquee-track {
-            display: flex; gap: 12px;
-            width: max-content;
+            display: flex; gap: 12px; width: max-content;
             animation: scroll 40s linear infinite;
         }
-
         .reel-card {
-            width: 220px; /* Tamaño balanceado móvil/desktop */
-            aspect-ratio: 9/16;
-            border-radius: 8px;
-            overflow: hidden;
-            background: var(--card-bg); /* Fondo visible si falla video */
-            position: relative;
-            transform: translateZ(0); /* Acelerar GPU */
-            border: 1px solid #1a1a1a; /* Borde sutil para delimitar */
+            width: 220px; aspect-ratio: 9/16; border-radius: 8px; overflow: hidden;
+            background: var(--card-bg); position: relative; transform: translateZ(0); border: 1px solid #1a1a1a;
         }
-
         .reel-card video {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-            display: block; /* Eliminar gaps */
+            width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: opacity 0.3s; display: block;
         }
-        
         .reel-card:hover video { opacity: 1; }
-
-        /* Fallback text si no hay video */
         .video-fallback {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; align-items: center; justify-content: center;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
             color: #333; font-size: 2rem; font-weight: bold; z-index: -1;
         }
-
-        @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         /* --- GRID FOTOS --- */
         .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 columnas en móvil */
-            gap: 10px;
-            padding: 0 15px 4rem 15px;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 15px 4rem 15px;
         }
-
         .photo-card {
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            background: var(--card-bg);
-            width: 100%;
+            position: relative; border-radius: 8px; overflow: hidden; background: var(--card-bg); width: 100%;
         }
         .aspect-square { aspect-ratio: 1/1; }
         .aspect-vertical { aspect-ratio: 9/16; }
-
         .photo-card img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            filter: grayscale(100%);
-            transition: filter 0.4s, transform 0.6s;
-            display: block;
+            width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: filter 0.4s, transform 0.6s; display: block;
         }
+        .photo-card:active img, .photo-card:hover img { filter: grayscale(0%); transform: scale(1.03); }
 
-        /* En móvil, al tocar (active) se ilumina */
-        .photo-card:active img, .photo-card:hover img {
-            filter: grayscale(0%);
-            transform: scale(1.03);
+        /* --- CONTACTO --- */
+        .contact-section {
+            padding: 4rem 15px; border-top: 1px solid var(--accent); margin: 0 15px; text-align: center;
+        }
+        .contact-title { font-size: 2rem; margin-bottom: 2rem; font-weight: 600; letter-spacing: -0.02em; }
+        
+        .minimal-form {
+            max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem;
+        }
+        .minimal-input {
+            background: transparent; border: none; border-bottom: 1px solid #333;
+            padding: 1rem 0; color: white; font-family: 'Inter'; font-size: 1rem; outline: none; border-radius: 0;
+            transition: border-color 0.3s;
+        }
+        .minimal-input:focus { border-color: white; }
+        .minimal-btn {
+            background: white; color: black; border: none; padding: 1rem; margin-top: 1rem;
+            font-family: 'Inter'; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;
+            cursor: pointer; border-radius: 4px; transition: opacity 0.3s;
+        }
+        .minimal-btn:hover { opacity: 0.8; }
+        
+        .contact-email {
+            display: block; margin-top: 2rem; color: #666; text-decoration: none; font-size: 0.9rem;
         }
 
         /* --- LIGHTBOX --- */
         .lightbox {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.96); backdrop-filter: blur(15px);
-            z-index: 10000; display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); backdrop-filter: blur(15px);
+            z-index: 10000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s;
         }
         .lightbox.active { opacity: 1; pointer-events: all; }
-
         .close-lb {
-            position: absolute; top: 20px; right: 20px;
-            width: 40px; height: 40px;
-            background: rgba(255,255,255,0.1); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 1.2rem; cursor: pointer;
+            position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; cursor: pointer;
         }
 
-        /* --- MEDIA QUERIES (Móvil Específico) --- */
+        /* --- MEDIA QUERIES --- */
         @media (max-width: 768px) {
             .hero-container { height: 85vh; padding: 10px; }
             .section-header { padding-top: 2rem; }
-            
-            /* Videos un poco más pequeños en móvil para ver más */
             .reel-card { width: 160px; border-radius: 6px; } 
-            
-            /* Grid más ajustado */
             .gallery-grid { gap: 8px; padding-bottom: 3rem; }
-            
-            /* Ajustar textos */
             .section-title { font-size: 0.85rem; }
-            
-            /* Marquee más lento en móvil */
             .marquee-track { animation-duration: 50s; }
+
+            /* --- ANIMACIÓN ESPECIAL SOLO MÓVIL --- */
+            .hero-bg {
+                width: 130%; /* Más ancho para poder moverse */
+                max-width: none;
+                animation: panRightToLeft 20s linear infinite alternate;
+            }
+        }
+
+        @keyframes panRightToLeft {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-20%); } /* Mueve el exceso de imagen */
         }
     </style>
 </head>
 <body>
 
-    <!-- Cursor solo Desktop -->
     <div class="cursor" id="cursor"></div>
 
     <!-- 1. HERO -->
     <div class="hero-container">
         <div class="hero-image-wrapper hover-trigger">
             <img src="portada.png" class="hero-bg" onerror="this.style.opacity='0.1'">
-            
-            <!-- Indicador Scroll -->
             <div class="scroll-indicator">
                 <span class="scroll-text">Scroll</span>
                 <div class="scroll-line"></div>
@@ -299,7 +248,7 @@
                 <div class="video-fallback">06</div>
             </div>
 
-            <!-- CLON para Loop Infinito -->
+            <!-- CLON para Loop -->
             <div class="reel-card hover-trigger" onclick="openLightbox('video', 'video1.mp4')">
                 <video src="video1.mp4" muted loop playsinline autoplay></video>
                 <div class="video-fallback">01</div>
@@ -334,6 +283,7 @@
     </div>
 
     <div class="gallery-grid">
+        <!-- Fotos 1-6 existentes -->
         <div class="photo-card aspect-vertical hover-trigger" onclick="openLightbox('image', 'foto1.png')">
             <img src="foto1.png" loading="lazy" onerror="this.style.opacity='0.2'">
         </div>
@@ -352,9 +302,42 @@
         <div class="photo-card aspect-square hover-trigger" onclick="openLightbox('image', 'foto6.png')">
             <img src="foto6.png" loading="lazy" onerror="this.style.opacity='0.2'">
         </div>
+
+        <!-- NUEVAS FOTOS 7-10 -->
+        <div class="photo-card aspect-vertical hover-trigger" onclick="openLightbox('image', 'foto7.png')">
+            <img src="foto7.png" loading="lazy" onerror="this.style.opacity='0.2'">
+        </div>
+        <div class="photo-card aspect-square hover-trigger" onclick="openLightbox('image', 'foto8.png')">
+            <img src="foto8.png" loading="lazy" onerror="this.style.opacity='0.2'">
+        </div>
+        <div class="photo-card aspect-square hover-trigger" onclick="openLightbox('image', 'foto9.png')">
+            <img src="foto9.png" loading="lazy" onerror="this.style.opacity='0.2'">
+        </div>
+        <div class="photo-card aspect-vertical hover-trigger" onclick="openLightbox('image', 'foto10.png')">
+            <img src="foto10.png" loading="lazy" onerror="this.style.opacity='0.2'">
+        </div>
     </div>
 
-    <footer style="padding: 2rem; text-align: center; border-top: 1px solid #111; color: #444; font-size: 0.75rem;">
+    <!-- 4. CONTACTO (FormSubmit) -->
+    <div class="contact-section">
+        <h2 class="contact-title">WORK WITH US</h2>
+        
+        <form action="https://formsubmit.co/hello@sennen.agency" method="POST" class="minimal-form">
+            <!-- Redirección opcional para volver a la pagina tras enviar -->
+            <input type="hidden" name="_next" value="https://sennen.agency">
+            <input type="hidden" name="_captcha" value="false">
+            
+            <input type="text" name="name" class="minimal-input" placeholder="NAME" required>
+            <input type="email" name="email" class="minimal-input" placeholder="EMAIL" required>
+            <input type="text" name="message" class="minimal-input" placeholder="MESSAGE">
+            
+            <button type="submit" class="minimal-btn hover-trigger">SEND REQUEST</button>
+        </form>
+
+        <a href="mailto:hello@sennen.agency" class="contact-email hover-trigger">hello@sennen.agency</a>
+    </div>
+
+    <footer style="padding: 2rem; text-align: center; color: #444; font-size: 0.75rem;">
         SENNEN © 2026
     </footer>
 
@@ -365,10 +348,8 @@
     </div>
 
     <script>
-        // 1. CURSOR LOGIC
+        // CURSOR
         const cursor = document.getElementById('cursor');
-        
-        // Solo activar cursor en dispositivos no-táctiles
         if (window.matchMedia("(hover: hover)").matches) {
             document.addEventListener('mousemove', e => {
                 cursor.style.left = e.clientX + 'px';
@@ -380,19 +361,15 @@
             });
         }
 
-        // 2. FORCE VIDEO PLAY (Fix para Móviles)
-        // Algunos navegadores móviles pausan videos si están en modo ahorro de batería
+        // FORCE VIDEO PLAY
         document.addEventListener('DOMContentLoaded', () => {
             const vids = document.querySelectorAll('video');
             vids.forEach(v => {
-                v.play().catch(e => {
-                    // Si falla el autoplay, mostrar controles o dejar estático
-                    console.log("Autoplay bloqueado, esperando interacción");
-                });
+                v.play().catch(e => console.log("Autoplay waiting for interaction"));
             });
         });
 
-        // 3. LIGHTBOX
+        // LIGHTBOX
         function openLightbox(type, src) {
             const lb = document.getElementById('lightbox');
             const content = document.getElementById('lb-content');
@@ -415,3 +392,4 @@
     </script>
 </body>
 </html>
+
