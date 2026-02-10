@@ -2,10 +2,10 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SENNEN | 2026 Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SENNEN | 2026 Mobile</title>
     
-    <!-- Fuentes Premium: Inter para todo (Estilo Apple) -->
+    <!-- Fuentes Premium: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -14,328 +14,348 @@
         :root {
             --bg: #000000;
             --txt: #ffffff;
-            --accent: #111111;
-            --glass: rgba(255, 255, 255, 0.05);
+            --accent: #1a1a1a;
+            --card-bg: #111111; /* Color de fondo si no carga video */
             --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             background-color: var(--bg);
             color: var(--txt);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; /* Font stack nativo Apple */
+            font-family: 'Inter', -apple-system, sans-serif;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            cursor: none; /* Cursor custom en Desktop */
         }
 
-        /* --- HERO: PORTADA LIMPIA (Estilo Editorial) --- */
+        /* --- CURSOR CUSTOM (Solo Desktop) --- */
+        @media (hover: hover) and (pointer: fine) {
+            .cursor {
+                width: 12px; height: 12px;
+                background: white; border-radius: 50%;
+                position: fixed; pointer-events: none; z-index: 9999;
+                transform: translate(-50%, -50%);
+                mix-blend-mode: difference;
+                transition: transform 0.2s ease, width 0.3s, height 0.3s;
+            }
+            .cursor.hovered { width: 50px; height: 50px; background: rgba(255,255,255,0.2); backdrop-filter: blur(2px); }
+        }
+        /* Ocultar en móvil */
+        @media (hover: none) { 
+            .cursor { display: none; } 
+            body { cursor: auto; }
+        }
+
+        /* --- HERO: PORTADA --- */
         .hero-container {
             width: 100%;
-            height: 85vh; /* Un poco más pequeña que 100vh */
-            padding: 20px; /* Margen alrededor (Inset) */
+            height: 90vh; /* Alto impacto en móvil */
+            padding: 15px; /* Margen reducido en móvil */
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .hero-image-wrapper {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            border-radius: 12px; /* Redondeo sutil Apple */
             position: relative;
         }
 
-        .hero-bg {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(100%); /* Elegancia B&N */
-            transition: transform 1.5s var(--ease);
+        .hero-image-wrapper {
+            width: 100%; height: 100%;
+            overflow: hidden;
+            border-radius: 12px;
+            position: relative;
+            background: var(--card-bg); /* Fallback color */
         }
 
-        /* Efecto sutil al pasar el mouse por la portada */
+        .hero-bg {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: transform 1.5s var(--ease), filter 1s ease;
+        }
+
         .hero-image-wrapper:hover .hero-bg {
-            transform: scale(1.02); 
+            transform: scale(1.03);
             filter: grayscale(0%);
         }
 
-        /* --- TÍTULOS DE SECCIÓN --- */
+        /* --- SCROLL INDICATOR (Animado) --- */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.7;
+            z-index: 10;
+        }
+
+        .scroll-text {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 500;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, #fff, transparent);
+            animation: scrollLine 2s infinite;
+        }
+
+        @keyframes scrollLine {
+            0% { transform: scaleY(0); transform-origin: top; }
+            50% { transform: scaleY(1); transform-origin: top; }
+            51% { transform: scaleY(1); transform-origin: bottom; }
+            100% { transform: scaleY(0); transform-origin: bottom; }
+        }
+
+        /* --- HEADERS --- */
         .section-header {
-            padding: 4rem 20px 1.5rem;
+            padding: 3rem 15px 1rem;
             display: flex;
             justify-content: space-between;
             align-items: baseline;
             border-bottom: 1px solid var(--accent);
-            margin: 0 20px;
+            margin: 0 15px;
         }
+        .section-title { font-size: 0.95rem; font-weight: 500; color: #fff; }
+        .section-meta { font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
 
-        .section-title {
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: -0.01em;
-            color: #fff;
-        }
-
-        .section-meta {
-            font-size: 0.75rem;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* --- MOTION REELS (AUTO-SCROLL INFINITO) --- */
+        /* --- VIDEO REELS (MARQUEE) --- */
         .marquee-wrapper {
-            width: 100%;
-            overflow: hidden;
-            padding: 2rem 0 4rem 0;
+            width: 100%; overflow: hidden;
+            padding: 1.5rem 0 3rem 0;
             background: var(--bg);
             position: relative;
         }
-
-        /* Degradados laterales para suavizar la entrada/salida */
+        /* Fades laterales para suavidad */
         .marquee-wrapper::before, .marquee-wrapper::after {
-            content: '';
-            position: absolute;
-            top: 0; bottom: 0;
-            width: 100px;
-            z-index: 2;
-            pointer-events: none;
+            content: ''; position: absolute; top: 0; bottom: 0; width: 50px; z-index: 2; pointer-events: none;
         }
-        .marquee-wrapper::before { left: 0; background: linear-gradient(to right, #000, transparent); }
-        .marquee-wrapper::after { right: 0; background: linear-gradient(to left, #000, transparent); }
+        .marquee-wrapper::before { left: 0; background: linear-gradient(to right, var(--bg), transparent); }
+        .marquee-wrapper::after { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
 
         .marquee-track {
-            display: flex;
-            gap: 16px;
+            display: flex; gap: 12px;
             width: max-content;
-            animation: scroll 60s linear infinite; /* Movimiento constante */
+            animation: scroll 40s linear infinite;
         }
 
-        /* Pausar scroll al hacer hover para poder hacer click */
-        .marquee-track:hover {
-            animation-play-state: paused;
+        .reel-card {
+            width: 220px; /* Tamaño balanceado móvil/desktop */
+            aspect-ratio: 9/16;
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--card-bg); /* Fondo visible si falla video */
+            position: relative;
+            transform: translateZ(0); /* Acelerar GPU */
+            border: 1px solid #1a1a1a; /* Borde sutil para delimitar */
+        }
+
+        .reel-card video {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+            display: block; /* Eliminar gaps */
+        }
+        
+        .reel-card:hover video { opacity: 1; }
+
+        /* Fallback text si no hay video */
+        .video-fallback {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            color: #333; font-size: 2rem; font-weight: bold; z-index: -1;
         }
 
         @keyframes scroll {
             0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } /* Se mueve la mitad (el set original) y reinicia */
+            100% { transform: translateX(-50%); }
         }
 
-        /* TARJETA DE VIDEO (REELS 9:16) */
-        .reel-card {
-            width: 280px; /* Ancho fijo para mantener ritmo */
-            aspect-ratio: 9/16; /* Formato Vertical */
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-            background: #111;
-            cursor: pointer;
-            transition: transform 0.4s var(--ease);
-        }
-
-        .reel-card video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.7;
-            transition: opacity 0.4s;
-        }
-
-        .reel-card:hover {
-            transform: scale(0.98); /* Toque táctil */
-        }
-        .reel-card:hover video {
-            opacity: 1;
-        }
-
-        /* --- GRID FOTOS (Masonry Style 9:16 & 4:4) --- */
+        /* --- GRID FOTOS --- */
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 0 20px 4rem 20px;
+            grid-template-columns: repeat(2, 1fr); /* 2 columnas en móvil */
+            gap: 10px;
+            padding: 0 15px 4rem 15px;
         }
 
         .photo-card {
             position: relative;
             border-radius: 8px;
             overflow: hidden;
-            cursor: pointer;
-            background: #111;
+            background: var(--card-bg);
+            width: 100%;
         }
-        
-        /* Clase para fotos cuadradas (1:1) */
         .aspect-square { aspect-ratio: 1/1; }
-        /* Clase para fotos verticales (9:16) */
         .aspect-vertical { aspect-ratio: 9/16; }
 
         .photo-card img {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             object-fit: cover;
             filter: grayscale(100%);
-            transition: filter 0.5s ease, transform 0.7s var(--ease);
+            transition: filter 0.4s, transform 0.6s;
+            display: block;
         }
 
-        .photo-card:hover img {
+        /* En móvil, al tocar (active) se ilumina */
+        .photo-card:active img, .photo-card:hover img {
             filter: grayscale(0%);
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
-        /* --- LIGHTBOX (Visor) --- */
+        /* --- LIGHTBOX --- */
         .lightbox {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(20px);
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.96); backdrop-filter: blur(15px);
+            z-index: 10000; display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
         }
         .lightbox.active { opacity: 1; pointer-events: all; }
 
         .close-lb {
-            position: absolute;
-            top: 30px;
-            right: 30px;
-            color: #fff;
-            font-size: 2rem;
-            cursor: pointer;
-            font-weight: 300;
-            opacity: 0.5;
-            transition: opacity 0.2s;
-        }
-        .close-lb:hover { opacity: 1; }
-
-        /* --- FOOTER --- */
-        footer {
-            border-top: 1px solid var(--accent);
-            padding: 3rem 20px;
-            display: flex;
-            justify-content: space-between;
-            color: #444;
-            font-size: 0.8rem;
+            position: absolute; top: 20px; right: 20px;
+            width: 40px; height: 40px;
+            background: rgba(255,255,255,0.1); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.2rem; cursor: pointer;
         }
 
-        /* Responsive */
+        /* --- MEDIA QUERIES (Móvil Específico) --- */
         @media (max-width: 768px) {
-            .hero-container { height: 60vh; padding: 10px; }
-            .reel-card { width: 200px; } /* Más pequeños en móvil */
-            .gallery-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .hero-container { height: 85vh; padding: 10px; }
+            .section-header { padding-top: 2rem; }
+            
+            /* Videos un poco más pequeños en móvil para ver más */
+            .reel-card { width: 160px; border-radius: 6px; } 
+            
+            /* Grid más ajustado */
+            .gallery-grid { gap: 8px; padding-bottom: 3rem; }
+            
+            /* Ajustar textos */
+            .section-title { font-size: 0.85rem; }
+            
+            /* Marquee más lento en móvil */
+            .marquee-track { animation-duration: 50s; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 1. HERO (PORTADA LIMPIA) -->
+    <!-- Cursor solo Desktop -->
+    <div class="cursor" id="cursor"></div>
+
+    <!-- 1. HERO -->
     <div class="hero-container">
-        <div class="hero-image-wrapper">
-            <!-- Usa tu archivo portada.png -->
-            <img src="portada.png" class="hero-bg" alt="Cover" onerror="this.style.backgroundColor='#1a1a1a'">
+        <div class="hero-image-wrapper hover-trigger">
+            <img src="portada.png" class="hero-bg" onerror="this.style.opacity='0.1'">
+            
+            <!-- Indicador Scroll -->
+            <div class="scroll-indicator">
+                <span class="scroll-text">Scroll</span>
+                <div class="scroll-line"></div>
+            </div>
         </div>
     </div>
 
-    <!-- 2. REELS (SCROLL AUTOMÁTICO 9:16) -->
+    <!-- 2. REELS -->
     <div class="section-header">
-        <div class="section-title">Motion Reels</div>
-        <div class="section-meta">Auto-Play</div>
+        <div class="section-title">Motion</div>
+        <div class="section-meta">Selected Work</div>
     </div>
 
     <div class="marquee-wrapper">
         <div class="marquee-track">
-            <!-- SET 1 (Originales) -->
-            <!-- Sin atributo 'poster', se mostrará el primer frame del video -->
-            <div class="reel-card" onclick="openLightbox('video', 'video1.mp4')">
-                <video src="video1.mp4" loop muted playsinline></video>
+            <!-- Bloque 1 -->
+            <div class="reel-card hover-trigger" onclick="openLightbox('video', 'video1.mp4')">
+                <video src="video1.mp4" muted loop playsinline autoplay></video>
+                <div class="video-fallback">01</div>
             </div>
-            <div class="reel-card" onclick="openLightbox('video', 'video2.mp4')">
-                <video src="video2.mp4" loop muted playsinline></video>
+            <div class="reel-card hover-trigger" onclick="openLightbox('video', 'video2.mp4')">
+                <video src="video2.mp4" muted loop playsinline autoplay></video>
+                <div class="video-fallback">02</div>
             </div>
-            <div class="reel-card" onclick="openLightbox('video', 'video3.mp4')">
-                <video src="video3.mp4" loop muted playsinline></video>
+            <div class="reel-card hover-trigger" onclick="openLightbox('video', 'video3.mp4')">
+                <video src="video3.mp4" muted loop playsinline autoplay></video>
+                <div class="video-fallback">03</div>
             </div>
-            <div class="reel-card" onclick="openLightbox('video', 'video4.mp4')">
-                <video src="video4.mp4" loop muted playsinline></video>
+            <div class="reel-card hover-trigger" onclick="openLightbox('video', 'video4.mp4')">
+                <video src="video4.mp4" muted loop playsinline autoplay></video>
+                <div class="video-fallback">04</div>
             </div>
-            <div class="reel-card" onclick="openLightbox('video', 'video5.mp4')">
-                <video src="video5.mp4" loop muted playsinline></video>
+            <div class="reel-card hover-trigger" onclick="openLightbox('video', 'video5.mp4')">
+                <video src="video5.mp4" muted loop playsinline autoplay></video>
+                <div class="video-fallback">05</div>
             </div>
-            <div class="reel-card" onclick="openLightbox('video', 'video6.mp4')">
-                <video src="video6.mp4" loop muted playsinline></video>
+            <div class="reel-card hover-trigger" onclick="openLightbox('video', 'video6.mp4')">
+                <video src="video6.mp4" muted loop playsinline autoplay></video>
+                <div class="video-fallback">06</div>
             </div>
 
-            <!-- SET 2 (Clones para loop infinito) -->
-            <!-- Duplicar exactamente los mismos videos -->
-            <div class="reel-card" onclick="openLightbox('video', 'video1.mp4')">
-                <video src="video1.mp4" loop muted playsinline></video>
+            <!-- CLON para Loop Infinito -->
+            <div class="reel-card hover-trigger" onclick="openLightbox('video', 'video1.mp4')">
+                <video src="video1.mp4" muted loop playsinline autoplay></video>
+                <div class="video-fallback">01</div>
             </div>
-            <div class="reel-card" onclick="openLightbox('video', 'video2.mp4')">
-                <video src="video2.mp4" loop muted playsinline></video>
+            <div class="reel-card hover-trigger" onclick="openLightbox('video', 'video2.mp4')">
+                <video src="video2.mp4" muted loop playsinline autoplay></video>
+                <div class="video-fallback">02</div>
             </div>
-            <div class="reel-card" onclick="openLightbox('video', 'video3.mp4')">
-                <video src="video3.mp4" loop muted playsinline></video>
+            <div class="reel-card hover-trigger" onclick="openLightbox('video', 'video3.mp4')">
+                <video src="video3.mp4" muted loop playsinline autoplay></video>
+                <div class="video-fallback">03</div>
             </div>
-            <div class="reel-card" onclick="openLightbox('video', 'video4.mp4')">
-                <video src="video4.mp4" loop muted playsinline></video>
+            <div class="reel-card hover-trigger" onclick="openLightbox('video', 'video4.mp4')">
+                <video src="video4.mp4" muted loop playsinline autoplay></video>
+                <div class="video-fallback">04</div>
             </div>
-            <div class="reel-card" onclick="openLightbox('video', 'video5.mp4')">
-                <video src="video5.mp4" loop muted playsinline></video>
+            <div class="reel-card hover-trigger" onclick="openLightbox('video', 'video5.mp4')">
+                <video src="video5.mp4" muted loop playsinline autoplay></video>
+                <div class="video-fallback">05</div>
             </div>
-            <div class="reel-card" onclick="openLightbox('video', 'video6.mp4')">
-                <video src="video6.mp4" loop muted playsinline></video>
+            <div class="reel-card hover-trigger" onclick="openLightbox('video', 'video6.mp4')">
+                <video src="video6.mp4" muted loop playsinline autoplay></video>
+                <div class="video-fallback">06</div>
             </div>
         </div>
     </div>
 
-    <!-- 3. STILLS (FOTOS 9:16 Y 4:4) -->
+    <!-- 3. STILLS -->
     <div class="section-header">
-        <div class="section-title">Selected Stills</div>
-        <div class="section-meta">2026 Collection</div>
+        <div class="section-title">Stills</div>
+        <div class="section-meta">Gallery</div>
     </div>
 
     <div class="gallery-grid">
-        <!-- Mezcla de formatos vertical y cuadrado -->
-        
-        <!-- Foto 1 (Vertical) -->
-        <div class="photo-card aspect-vertical" onclick="openLightbox('image', 'foto1.png')">
-            <img src="foto1.png" onerror="this.src='https://via.placeholder.com/450x800/222/444?text=9:16'">
+        <div class="photo-card aspect-vertical hover-trigger" onclick="openLightbox('image', 'foto1.png')">
+            <img src="foto1.png" loading="lazy" onerror="this.style.opacity='0.2'">
         </div>
-
-        <!-- Foto 2 (Cuadrada) -->
-        <div class="photo-card aspect-square" onclick="openLightbox('image', 'foto2.png')">
-            <img src="foto2.png" onerror="this.src='https://via.placeholder.com/600x600/222/444?text=1:1'">
+        <div class="photo-card aspect-square hover-trigger" onclick="openLightbox('image', 'foto2.png')">
+            <img src="foto2.png" loading="lazy" onerror="this.style.opacity='0.2'">
         </div>
-
-        <!-- Foto 3 (Vertical) -->
-        <div class="photo-card aspect-vertical" onclick="openLightbox('image', 'foto3.png')">
-            <img src="foto3.png" onerror="this.src='https://via.placeholder.com/450x800/222/444?text=9:16'">
+        <div class="photo-card aspect-vertical hover-trigger" onclick="openLightbox('image', 'foto3.png')">
+            <img src="foto3.png" loading="lazy" onerror="this.style.opacity='0.2'">
         </div>
-
-        <!-- Foto 4 (Vertical) -->
-        <div class="photo-card aspect-vertical" onclick="openLightbox('image', 'foto4.png')">
-            <img src="foto4.png" onerror="this.src='https://via.placeholder.com/450x800/222/444?text=9:16'">
+        <div class="photo-card aspect-vertical hover-trigger" onclick="openLightbox('image', 'foto4.png')">
+            <img src="foto4.png" loading="lazy" onerror="this.style.opacity='0.2'">
         </div>
-
-        <!-- Foto 5 (Cuadrada) -->
-        <div class="photo-card aspect-square" onclick="openLightbox('image', 'foto5.png')">
-            <img src="foto5.png" onerror="this.src='https://via.placeholder.com/600x600/222/444?text=1:1'">
+        <div class="photo-card aspect-square hover-trigger" onclick="openLightbox('image', 'foto5.png')">
+            <img src="foto5.png" loading="lazy" onerror="this.style.opacity='0.2'">
         </div>
-
-        <!-- Foto 6 (Cuadrada) -->
-        <div class="photo-card aspect-square" onclick="openLightbox('image', 'foto6.png')">
-            <img src="foto6.png" onerror="this.src='https://via.placeholder.com/600x600/222/444?text=1:1'">
+        <div class="photo-card aspect-square hover-trigger" onclick="openLightbox('image', 'foto6.png')">
+            <img src="foto6.png" loading="lazy" onerror="this.style.opacity='0.2'">
         </div>
     </div>
 
-    <footer>
-        <div>Sennen Agency ©</div>
-        <div>Madrid, ES</div>
+    <footer style="padding: 2rem; text-align: center; border-top: 1px solid #111; color: #444; font-size: 0.75rem;">
+        SENNEN © 2026
     </footer>
 
     <!-- LIGHTBOX -->
@@ -345,27 +365,40 @@
     </div>
 
     <script>
-        // HOVER AUTOPLAY PARA REELS
-        // Aunque se mueven, al pasar el mouse se pausan y reproducen
-        const reels = document.querySelectorAll('.reel-card video');
+        // 1. CURSOR LOGIC
+        const cursor = document.getElementById('cursor');
         
-        reels.forEach(video => {
-            video.parentElement.addEventListener('mouseenter', () => {
-                video.play().catch(()=>{});
+        // Solo activar cursor en dispositivos no-táctiles
+        if (window.matchMedia("(hover: hover)").matches) {
+            document.addEventListener('mousemove', e => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
             });
-            video.parentElement.addEventListener('mouseleave', () => {
-                video.pause();
-                // video.currentTime = 0; // Descomentar si quieres que reinicie
+            document.querySelectorAll('.hover-trigger').forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+            });
+        }
+
+        // 2. FORCE VIDEO PLAY (Fix para Móviles)
+        // Algunos navegadores móviles pausan videos si están en modo ahorro de batería
+        document.addEventListener('DOMContentLoaded', () => {
+            const vids = document.querySelectorAll('video');
+            vids.forEach(v => {
+                v.play().catch(e => {
+                    // Si falla el autoplay, mostrar controles o dejar estático
+                    console.log("Autoplay bloqueado, esperando interacción");
+                });
             });
         });
 
-        // LIGHTBOX LOGIC
+        // 3. LIGHTBOX
         function openLightbox(type, src) {
             const lb = document.getElementById('lightbox');
             const content = document.getElementById('lb-content');
             
             if(type === 'video') {
-                content.innerHTML = `<video src="${src}" controls autoplay style="max-height: 85vh; max-width: 90vw; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);"></video>`;
+                content.innerHTML = `<video src="${src}" controls autoplay playsinline style="max-height: 85vh; max-width: 90vw; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); background:#000;"></video>`;
             } else {
                 content.innerHTML = `<img src="${src}" style="max-height: 90vh; max-width: 90vw; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">`;
             }
@@ -373,15 +406,12 @@
         }
 
         function closeLightbox() {
-            document.getElementById('lightbox').classList.remove('active');
+            const lb = document.getElementById('lightbox');
+            lb.classList.remove('active');
             setTimeout(() => {
                 document.getElementById('lb-content').innerHTML = '';
             }, 300);
         }
-
-        document.addEventListener('keydown', (e) => {
-            if(e.key === 'Escape') closeLightbox();
-        });
     </script>
 </body>
 </html>
